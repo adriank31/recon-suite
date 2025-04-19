@@ -1,3 +1,4 @@
+# README.md
 # Red Team Recon Suite
 
 A full-featured, terminal-based reconnaissance toolkit designed for red teamers, bug bounty hunters, and penetration testers. This modular Python project replicates the core functionality of tools like **ReconFTW** with a clean, extensible architecture.
