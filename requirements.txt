@@ -1,6 +1,18 @@
-# requirements.txt
-
-requests
 beautifulsoup4
-dnspython
-PyYAML
+requests
+pyyaml
+rich
+lxml
+
+# For JavaScript parsing and LinkFinder
+tldextract
+
+# For PDF and metadata parsing (optional for future features)
+pdfminer.six
+
+# Optional CLI utilities if using subprocess-based runners
+httpx
+
+# LinkFinder requirements if running manually or embedded
+colorama
+jsbeautifier

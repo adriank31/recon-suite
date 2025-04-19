@@ -1,128 +1,161 @@
-# README.md
-
-# 🛡️ Red Team Recon Suite
+# Red Team Recon Suite
 
 A full-featured, terminal-based reconnaissance toolkit designed for red teamers, bug bounty hunters, and penetration testers. This modular Python project replicates the core functionality of tools like **ReconFTW** with a clean, extensible architecture.
 
 ---
 
-## 🔧 Features
+## Features
 
-### OSINT
-- WHOIS Information
-- Email + Leak Search (Wayback + Leak-Lookup)
-- Metadata Dorks (PDF/DOC/XLS)
-- Swagger/OpenAPI Exposure
-- Spoofable Domain Checks (SPF, DKIM, DMARC)
+### 🕵️ OSINT Modules
+- WHOIS Lookup
+- Email Address Enumeration
+- Credential Leak Discovery (public pastebin/hibp APIs)
+- PDF/DOC/XLS Metadata Search (Google Dorks)
+- Exposed API Discovery (Porch Pirate)
+- Spoof Check (SPF, DKIM, DMARC)
+- LinkedIn Profile Enumeration
+- Employee Name + Phone Discovery from Web & PDF
 
-### Subdomain Enumeration
-- Passive Subdomain Discovery (Subfinder + Assetfinder)
-- DNS Record Collection + Zone Transfer
-- Subdomain Takeover Scanning
-- Dangling CNAME / DNS Takeover Detection
+### 🌐 Subdomain Discovery
+- Passive Subdomain Enumeration (Subfinder, Assetfinder, Amass, crt.sh)
+- DNS Record Collection (A, AAAA, MX, CNAME, TXT, SOA)
+- Subdomain Takeover Check
+- DNS Takeover Check
+- Live Resolution (dnsx)
 
-### Host Recon
-- IP Ownership and Geolocation (IPInfo)
+### 💻 Host Enumeration
+- IP Info Lookup (ASN, location, reverse DNS)
 - WAF Detection
-- Fast Port Scanning (Masscan/Nmap)
-- Vulnerability Scanning (Nmap Vuln Scripts)
+- TCP Port Scanning (masscan & nmap fallback)
+- Service/Version Detection
+- Vulnerability Scripts (Nmap Vuln NSEs)
+- SSL/TLS Certificate Info (sslscan)
 
-### Web Recon
-- Live HTTP Probing (httpx)
-- Web Template Scanning (Nuclei)
-- CMS Detection (WhatWeb)
-- JavaScript File + Secrets Analyzer
-- Web Directory Fuzzing (Gobuster)
+### 🕸 Web Recon
+- Web Prober (httpx)
+- Screenshot Recon (optional future feature)
+- Directory Fuzzing (ffuf)
+- Web Template Scanner (nuclei)
+- CMS Detection (whatweb)
+- JavaScript Analyzer:
+  - JS file enumeration
+  - API route discovery
+  - Secrets in JS (API keys, tokens, JWTs)
+  - Debug flags, unsafe eval, and DOM XSS sinks/sources
+- Endpoint & Param Discovery (via LinkFinder)
+- Discovery of `robots.txt`, `sitemap.xml`
+- Active Web Attacks:
+  - Open Redirects
+  - Host Header Injection
+  - CORS Misconfiguration Checks
 
 ---
 
-## 🗂 Project Structure
+## Project Structure
 
 ```
 recon-suite/
-├── recon.py                 # 🔹 Main CLI launcher
-├── config.yaml              # ⚙️  Global config for timeouts, wordlists, API keys
-├── requirements.txt         # 📦 Python dependencies
-├── README.md                # 📘 Project documentation
-├── modules/                 # 🧩 All recon modules (grouped by category)
-│   ├── __init__.py
+├── recon.py                         # Main CLI entry point
+├── config.yaml                      # Configuration file (API keys, settings)
+├── requirements.txt                 # Python module dependencies
+├── install_tools_kali.sh            # Installer script for Kali Linux
+├── install_tools_macos.sh           # Installer script for macOS (brew-based)
+├── README.md                        # Project documentation
+├── reports/                         # Output directory for all scan results
+│   └── <domain>_*.txt               # Individual recon report files
+├── logs/                            # Log files from each scan
+│   └── recon_<timestamp>.log        # Timestamped logs per session
+├── tools/
+│   └── LinkFinder/                  # Cloned LinkFinder repo for JS endpoint analysis
+├── utils/
+│   ├── logger.py                    # Timestamped logging utility
+│   └── helpers.py                   # Common helper functions (file I/O, validation, etc.)
+├── modules/
 │   ├── osint/
-│   │   ├── whois_lookup.py
-│   │   ├── emailfinder.py
-│   │   ├── leaks.py
-│   │   ├── metadata_finder.py
-│   │   ├── porch_pirate.py
-│   │   └── spoofcheck.py
+│   │   ├── __init__.py
+│   │   ├── whois_lookup.py          # WHOIS info collection
+│   │   ├── emailfinder.py           # Email scraping + regex
+│   │   ├── leaks.py                 # Pastebin/HIBP-style leak check
+│   │   ├── metadata_finder.py       # Google dorking for file metadata
+│   │   ├── porch_pirate.py          # API/Swagger leak discovery
+│   │   ├── spoofcheck.py            # SPF, DKIM, DMARC validation
+│   │   ├── people_contacts.py       # LinkedIn, staff, phone + name scraper
 │   ├── subdomains/
-│   │   ├── passive_enum.py
-│   │   ├── dns_records.py
-│   │   ├── takeover_scan.py
-│   │   └── dns_takeover.py
+│   │   ├── __init__.py
+│   │   ├── passive_enum.py          # Amass, crt.sh, subfinder, assetfinder
+│   │   ├── dns_records.py           # A, MX, CNAME, TXT, SOA records
+│   │   ├── takeover_scan.py         # Subdomain takeover checker
+│   │   ├── dns_takeover.py          # DNS unresolvable CNAMEs
+│   │   ├── dns_resolver.py          # DNS live validation using dnsx
 │   ├── hosts/
-│   │   ├── ip_info.py
-│   │   ├── waf_check.py
-│   │   ├── port_scanner.py
-│   │   └── vuln_scan.py
-│   └── webs/
-│       ├── web_probe.py
-│       ├── template_scanner.py
-│       ├── cms_detector.py
-│       ├── js_analyzer.py
-│       └── fuzzer.py
-├── utils/                   # 🛠 Utility support
-│   ├── logger.py
-│   ├── runner.py
-│   └── helpers.py
-├── reports/                 # 📄 All generated recon results (auto-created)
-│   ├── example.com_whois.txt
-│   ├── example.com_subdomains.txt
-│
-├── logs/                    # 📋 Timestamped logs for every scan (auto-created)
-│   ├── recon_20250417_163012.log
-│
+│   │   ├── __init__.py
+│   │   ├── ip_info.py               # IP geolocation, ASN, RDNS
+│   │   ├── waf_check.py             # WAF detection (e.g., AWS WAF)
+│   │   ├── port_scanner.py          # masscan/Nmap fallback scan
+│   │   ├── vuln_scan.py             # Nmap vuln scripts
+│   │   ├── ssl_checker.py           # SSL/TLS scan using sslscan
+│   ├── webs/
+│   │   ├── __init__.py
+│   │   ├── web_probe.py             # HTTPX-based live site discovery
+│   │   ├── template_scanner.py      # Nuclei scan against live hosts
+│   │   ├── cms_detector.py          # CMS & tech fingerprinting
+│   │   ├── js_analyzer.py           # Advanced JS endpoint + secret scanner
+│   │   ├── discovery_paths.py       # Fuzzing, robots.txt, sitemap.xml
+│   │   ├── fuzzer.py                # FFUF-based content fuzzing
+│   │   ├── active_web_attacks.py    # CORS, redirect, header injection testing
+
 ```
 
 ---
 
-## ⚙️ Setup (Kali Linux / WSL / Ubuntu)
+## Setup (Kali Linux / WSL / Ubuntu)
 
-### 1. Clone the repo
+### Clone the repo
 ```bash
 git clone https://github.com/adriank31/recon-suite.git
 cd recon-suite
 ```
 
-### 2. Create Python environment & install dependencies
+### Create Python environment & install dependencies
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Install required tools
+## Dependencies
+Ensure these are installed (auto-install script available):
+- `whois`, `curl`, `nmap`, `masscan`
+- `subfinder`, `assetfinder`, `amass`, `dnsx`
+- `ffuf`, `httpx`, `nuclei`, `whatweb`
+- `sslscan`, `LinkFinder` (cloned into `tools/LinkFinder/`)
+
 ```bash
-sudo apt install nmap masscan gobuster whatweb whois curl dnsutils golang-go
+# For Kali
+./install_tools_kali.sh
+
+# For macOS (with brew)
+./install_tools_macos.sh
 ```
 
-### 4. Install Go-based tools
+### Install Go-based tools
 ```bash
-go install github.com/projectdiscovery/subfinder.git
-go install github.com/projectdiscovery/httpx.git
-go install github.com/projectdiscovery/nuclei.git
-go install github.com/tomnomnom/assetfinder.git
+go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+go install github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
+go install github.com/tomnomnom/assetfinder@latest
 export PATH=$PATH:$(go env GOPATH)/bin
 ```
-
 ---
 
-## 🚀 Usage Examples
+## Usage Examples
 
-### 🔁 Full Recon
+### Full Recon
 ```bash
 python3 recon.py -d example.com --all
 ```
 
-### 🔍 Individual Modules
+### Individual Modules
 ```bash
 python3 recon.py -d example.com --osint      # Run OSINT module only
 python3 recon.py -d example.com --subdomains # Subdomain enumeration
@@ -132,24 +165,38 @@ python3 recon.py -i 192.168.1.1 --hosts       # IP-based recon
 
 ---
 
-## 📦 Output Locations
+## Output Locations
 
 - `reports/` → Recon results by module (TXT)
 - `logs/` → Timestamped execution logs
 
 ---
 
-## 🔐 Disclaimer
+
+## install_tools_kali.sh
+- Remember to run command `chmod +x install_tools_kali.sh`
+- And then `./install_tools_kali.sh`
+- Works for Kali Linux, Parrot Security OS, Ubuntu (Desktop/Server), Debian (11/12+), Linux Mint, Pop!_OS, Zorin OS Elementary OS
+
+---
+
+## install_tools_macos.sh
+- Remember to run command `chmod +x install_tools_macos.sh`
+- And then `./install_tools_macos.sh`
+- Works for macOS (any modern version), but you need to have Homebrew installed and configured
+
+
+## Disclaimer
 > ⚠️ Use this toolkit only against assets you own or have explicit permission to test. Unauthorized use is illegal and unethical.
 
 ---
 
-## 🧠 Credits & Inspirations
+## Credits & Inspirations
 - [ReconFTW](https://github.com/six2dez/reconftw)
 - ProjectDiscovery ecosystem (Subfinder, Nuclei, HTTPx)
 - Tomnomnom’s Assetfinder & tools
 
 ---
 
-## 📌 License
+## License
 MIT License — free to use, modify, and contribute.
