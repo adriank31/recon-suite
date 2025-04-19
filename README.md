@@ -88,7 +88,7 @@ recon-suite/
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/yourusername/recon-suite.git
+git clone https://github.com/adriank31/recon-suite.git
 cd recon-suite
 ```
 
@@ -106,10 +106,10 @@ sudo apt install nmap masscan gobuster whatweb whois curl dnsutils golang-go
 
 ### 4. Install Go-based tools
 ```bash
-go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-go install github.com/projectdiscovery/httpx/cmd/httpx@latest
-go install github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
-go install github.com/tomnomnom/assetfinder@latest
+go install github.com/projectdiscovery/subfinder.git
+go install github.com/projectdiscovery/httpx.git
+go install github.com/projectdiscovery/nuclei.git
+go install github.com/tomnomnom/assetfinder.git
 export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
