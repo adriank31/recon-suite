@@ -40,12 +40,46 @@ A full-featured, terminal-based reconnaissance toolkit designed for red teamers,
 
 ```
 recon-suite/
-├── recon.py                # CLI launcher
-├── config.yaml             # Settings
-├── modules/                # Recon modules (osint, subdomains, hosts, webs)
-├── utils/                  # Logging, helpers, subprocess runner
-├── reports/                # Recon results (auto-generated)
-└── logs/                   # Execution logs
+├── recon.py                 # 🔹 Main CLI launcher
+├── config.yaml              # ⚙️  Global config for timeouts, wordlists, API keys
+├── requirements.txt         # 📦 Python dependencies
+├── README.md                # 📘 Project documentation
+├── modules/                 # 🧩 All recon modules (grouped by category)
+│   ├── __init__.py
+│   ├── osint/
+│   │   ├── whois_lookup.py
+│   │   ├── emailfinder.py
+│   │   ├── leaks.py
+│   │   ├── metadata_finder.py
+│   │   ├── porch_pirate.py
+│   │   └── spoofcheck.py
+│   ├── subdomains/
+│   │   ├── passive_enum.py
+│   │   ├── dns_records.py
+│   │   ├── takeover_scan.py
+│   │   └── dns_takeover.py
+│   ├── hosts/
+│   │   ├── ip_info.py
+│   │   ├── waf_check.py
+│   │   ├── port_scanner.py
+│   │   └── vuln_scan.py
+│   └── webs/
+│       ├── web_probe.py
+│       ├── template_scanner.py
+│       ├── cms_detector.py
+│       ├── js_analyzer.py
+│       └── fuzzer.py
+├── utils/                   # 🛠 Utility support
+│   ├── logger.py
+│   ├── runner.py
+│   └── helpers.py
+├── reports/                 # 📄 All generated recon results (auto-created)
+│   ├── example.com_whois.txt
+│   ├── example.com_subdomains.txt
+│
+├── logs/                    # 📋 Timestamped logs for every scan (auto-created)
+│   ├── recon_20250417_163012.log
+│
 ```
 
 ---
