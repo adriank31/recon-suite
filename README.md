@@ -84,51 +84,72 @@ recon-suite/
 
 ---
 
-## 🚀 Usage Examples
+## ⚙️ Setup (Kali Linux / WSL / Ubuntu)
 
+### 1. Clone the repo
 ```bash
-# Full recon on domain
-python3 recon.py -d example.com --all
-
-# Run only OSINT
-python3 recon.py -d example.com --osint
-
-# IP-specific scan
-python3 recon.py -i 192.168.1.1 --hosts
+git clone https://github.com/yourusername/recon-suite.git
+cd recon-suite
 ```
 
----
-
-## 📦 Requirements
-
-Install required tools and dependencies:
+### 2. Create Python environment & install dependencies
 ```bash
-sudo apt install nmap masscan gobuster whois curl dnsutils
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Ensure the following CLI tools are installed and in your PATH:
-- subfinder
-- assetfinder
-- httpx
-- nuclei
-- whatweb
-- gobuster
-- masscan
-- nmap
+### 3. Install required tools
+```bash
+sudo apt install nmap masscan gobuster whatweb whois curl dnsutils golang-go
+```
+
+### 4. Install Go-based tools
+```bash
+go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+go install github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
+go install github.com/tomnomnom/assetfinder@latest
+export PATH=$PATH:$(go env GOPATH)/bin
+```
 
 ---
 
-## 📘 Credits & Acknowledgements
-- Inspired by [ReconFTW](https://github.com/six2dez/reconftw)
-- Uses tools by ProjectDiscovery, OWASP Amass, and the open-source security community
+## 🚀 Usage Examples
+
+### 🔁 Full Recon
+```bash
+python3 recon.py -d example.com --all
+```
+
+### 🔍 Individual Modules
+```bash
+python3 recon.py -d example.com --osint      # Run OSINT module only
+python3 recon.py -d example.com --subdomains # Subdomain enumeration
+python3 recon.py -d example.com --webs       # Web recon modules
+python3 recon.py -i 192.168.1.1 --hosts       # IP-based recon
+```
 
 ---
 
-## ⚠️ Legal Notice
-Use this tool only on targets you own or are explicitly authorized to test. Unauthorized scanning is illegal and unethical.
+## 📦 Output Locations
+
+- `reports/` → Recon results by module (TXT)
+- `logs/` → Timestamped execution logs
 
 ---
 
-## 🧠 Author
-Built for red team training, research, and offensive security practice.
+## 🔐 Disclaimer
+> ⚠️ Use this toolkit only against assets you own or have explicit permission to test. Unauthorized use is illegal and unethical.
+
+---
+
+## 🧠 Credits & Inspirations
+- [ReconFTW](https://github.com/six2dez/reconftw)
+- ProjectDiscovery ecosystem (Subfinder, Nuclei, HTTPx)
+- Tomnomnom’s Assetfinder & tools
+
+---
+
+## 📌 License
+MIT License — free to use, modify, and contribute.
