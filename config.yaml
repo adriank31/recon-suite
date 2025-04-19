@@ -1,0 +1,39 @@
+# config.yaml
+
+# ===============================
+#   Recon Suite Configuration
+# ===============================
+
+# Wordlists
+wordlist:
+  common: "/usr/share/wordlists/dirb/common.txt"
+
+# Thread limits
+threads:
+  max_parallel_tasks: 4
+
+# Timeout settings (in seconds)
+timeout:
+  http_timeout: 10
+  subprocess_timeout: 120
+
+# Severity filters for nuclei
+nuclei:
+  severity: [low, medium, high, critical]
+
+# API Keys (if available, optional)
+api_keys:
+  ipinfo: ""
+  leaklookup: "public"  # Replace with private key if available
+
+# External tool paths (optional override)
+tools:
+  gobuster: "gobuster"
+  subfinder: "subfinder"
+  assetfinder: "assetfinder"
+  httpx: "httpx"
+  nuclei: "nuclei"
+  whatweb: "whatweb"
+  masscan: "masscan"
+  nmap: "nmap"
+  curl: "curl"
